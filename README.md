@@ -1,0 +1,115 @@
+Domain-agnostic reconciliation engine with explicit refusal semantics.
+
+Observe → Plan → Safety → [Audit | Apply]
+
+Encodes restraint: refuses partial truth, protects prod workloads, immutable spine.
+Replay ≡ live. No blind healing. Swappable adapters.
+
+If truth is incomplete, it does nothing.
+
+# Dedalus Converger
+
+**Domain-agnostic reconciliation with explicit refusal semantics.**
+
+Dedalus Converger is a reconciliation engine that encodes restraint.  
+It converges declared intent against observed reality — and refuses to act when truth is incomplete.
+
+Observe → Plan → Safety → [Audit | Apply]
+
+
+> If truth is partial, the system does nothing.
+
+---
+
+## What This Is
+
+Dedalus Converger is **not** a Proxmox tool.
+
+It is a **reconciliation primitive** built around a tight contract:
+
+- Observation is read-only and honest
+- Planning is deterministic and pure
+- Safety is enforced through explicit invariants
+- Application is the only mutating phase
+
+Any system that can emit the `VMState` contract can use the same spine:
+- hypervisors
+- cloud APIs
+- incident replays
+- DFIR reconstructions
+- synthetic test fixtures
+
+Live data and replayed data are equivalent.
+
+---
+
+## Core Guarantees (Locked)
+
+Dedalus Converger encodes refusal as a first-class behavior.
+
+The system will **never**:
+
+- Act on incomplete or partial truth
+- Treat “missing” as “stopped”
+- Retry or heal failed observations
+- Discover or expand scope implicitly
+- Mutate state during audit or plan modes
+- Bypass safety policies via replay
+- Reinterpret history or time-travel outcomes
+- Stop production workloads by default
+
+If a decision cannot be made safely, the system refuses to act.
+
+These guarantees are enforced in code and documented in `docs/DESIGN.md`.
+
+---
+
+## The Spine (Immutable)
+
+desired.yaml → observe → plan → safety → [audit|apply]
+
+
+The spine lives in `converger/` and will never change.  
+Adapters swap only at the observation boundary.
+
+See `docs/ARCHITECTURE.md` for the full diagram and contract.
+
+---
+
+## Quick Start
+
+```bash
+pip install dedalus-converger
+
+# Audit current state against desired (dry-run)
+converger audit --desired examples/desired.yaml
+
+# Write plan to JSON
+converger plan --desired examples/desired.yaml --output plan.json
+
+# Apply changes (requires confirmation)
+converger apply --desired examples/desired.yaml
+
+##DEV
+
+git clone https://github.com/Dedalo101/dedalus-converger.git
+cd dedalus-converger
+pip install -e .[dev]
+
+pytest tests/ -v          # Negative proofs must pass
+ruff check .              # Lint
+black --check .           # Format
+
+
+
+### Commit This First
+
+After creating the empty repo:
+
+```bash
+git clone https://github.com/Dedalo101/dedalus-converger.git
+cd dedalus-converger
+# Create README.md with the content above
+git add README.md
+git commit -m "docs: restore original README with philosophy and quick start"
+git push origin main
