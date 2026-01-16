@@ -1,0 +1,27 @@
+[project]
+name = "dedalus-converger"
+version = "0.1.0"
+description = "Domain-agnostic reconciliation engine with explicit refusal semantics"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Dedalo Smith"}]
+dependencies = [
+    "proxmoxer>=2.0",
+    "pyyaml",
+    "click",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "ruff"]
+
+[project.scripts]
+converger = "converger.cli:main"  # adjust once we move cli
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]  # we'll create src/ next
+namespaces = false
