@@ -99,17 +99,6 @@ pip install -e .[dev]
 pytest tests/ -v          # Negative proofs must pass
 ruff check .              # Lint
 black --check .           # Format
-
-
-
-### Commit This First
-
-After creating the empty repo:
-
-```bash
-git clone https://github.com/Dedalo101/dedalus-converger.git
-cd dedalus-converger
-# Create README.md with the content above
 git add README.md
 git commit -m "docs: restore original README with philosophy and quick start"
 git push origin main
